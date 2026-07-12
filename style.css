@@ -24,6 +24,15 @@
   --paper:             #f4ecd8;
   --paper-shadow:      #d9c9a3;
 
+  /* Glass (frosted glass / gold glow surfaces) */
+  --glass-bg:          linear-gradient(135deg, rgba(255,255,255,0.07), rgba(255,255,255,0.015));
+  --glass-bg-strong:   linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.02));
+  --glass-border:      rgba(201, 169, 97, 0.28);
+  --glass-border-soft: rgba(201, 169, 97, 0.14);
+  --glass-blur:        22px;
+  --glass-shadow:      0 24px 70px -24px rgba(0,0,0,0.65), inset 0 1px 0 rgba(255,255,255,0.09);
+  --glass-glow:        0 0 46px rgba(201,169,97,0.14);
+
   /* Type */
   --font-display: 'Cormorant Garamond', 'Times New Roman', serif;
   --font-script:  'Dancing Script', cursive;
@@ -107,6 +116,70 @@ html { scrollbar-width: thin; scrollbar-color: var(--gold-dim) var(--black-void)
   outline: 1px solid var(--gold-bright);
   outline-offset: 4px;
 }
+
+/* ----------------------------------------------------------------
+   2.5 GLASS PANEL — reusable frosted-glass / gold-glow surface
+   ---------------------------------------------------------------- */
+.glass-panel {
+  position: relative;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur)) saturate(1.15);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.15);
+  border: 1px solid var(--glass-border-soft);
+  border-radius: 18px;
+  box-shadow: var(--glass-shadow);
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition:
+    box-shadow 0.6s var(--ease-soft),
+    border-color 0.6s var(--ease-soft),
+    background 0.6s var(--ease-soft),
+    transform 0.35s var(--ease-soft);
+  isolation: isolate;
+}
+.glass-panel::before {
+  /* top sheen — thin bright line where light would catch the glass edge */
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(160deg, rgba(232,200,116,0.55), rgba(232,200,116,0) 30%, rgba(232,200,116,0) 70%, rgba(122,32,42,0.18));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.6;
+  transition: opacity 0.6s var(--ease-soft);
+}
+.glass-panel::after {
+  /* diagonal light sweep on hover */
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.10) 45%, transparent 60%);
+  transform: translateX(-120%);
+  transition: transform 1.1s var(--ease-luxury);
+  pointer-events: none;
+}
+.glass-panel:hover,
+.glass-panel.is-active-glass {
+  border-color: var(--glass-border);
+  box-shadow: var(--glass-shadow), var(--glass-glow);
+}
+.glass-panel.is-active-glass {
+  background:
+    radial-gradient(circle at var(--glow-x, 50%) var(--glow-y, 50%), rgba(232,200,116,0.16), transparent 55%),
+    var(--glass-bg);
+}
+.glass-panel:hover::before { opacity: 1; }
+.glass-panel:hover::after { transform: translateX(120%); }
+
+@media (hover: none) {
+  .glass-panel::after { display: none; }
+}
+
 
 /* ----------------------------------------------------------------
    2. AMBIENT / GLOBAL ATMOSPHERE LAYERS
@@ -616,7 +689,13 @@ html { scrollbar-width: thin; scrollbar-color: var(--gold-dim) var(--black-void)
   box-shadow: 0 0 0 6px var(--black-void), 0 0 22px rgba(201,169,97,0.18);
 }
 
-.chapter__content { padding-top: 0.35rem; }
+.chapter__content {
+  padding-top: 0.35rem;
+}
+.chapter__content.glass-panel {
+  padding: clamp(1.4rem, 4vw, 2.2rem);
+  border-radius: 20px;
+}
 .chapter__index {
   display: block;
   font-family: var(--font-display);
@@ -716,15 +795,21 @@ html { scrollbar-width: thin; scrollbar-color: var(--gold-dim) var(--black-void)
 .letter__header { position: relative; text-align: center; margin-bottom: clamp(2.5rem, 8vh, 4rem); }
 .letter__header .section-eyebrow { color: var(--gold-bright); }
 
+.letter__frame {
+  position: relative;
+  width: min(100%, 680px);
+  padding: clamp(0.9rem, 3vw, 1.6rem);
+  border-radius: 26px;
+}
+
 .letter__paper {
   position: relative;
-  width: min(100%, 640px);
   background: var(--paper);
   color: #3a2f22;
   padding: clamp(2.2rem, 6vw, 4rem) clamp(1.8rem, 6vw, 3.4rem);
-  border-radius: 2px;
+  border-radius: 10px;
   box-shadow:
-    0 40px 90px -30px rgba(0,0,0,0.75),
+    0 30px 70px -24px rgba(0,0,0,0.6),
     0 0 0 1px rgba(0,0,0,0.06);
 }
 .letter__paper-texture {
@@ -883,11 +968,8 @@ html { scrollbar-width: thin; scrollbar-color: var(--gold-dim) var(--black-void)
 }
 
 .video-card {
-  border-radius: 5px;
+  border-radius: 20px;
   overflow: hidden;
-  border: 1px solid rgba(201,169,97,0.12);
-  background: var(--black-rich);
-  box-shadow: 0 30px 70px -30px rgba(0,0,0,0.7);
 }
 .video-card__player {
   width: 100%;
@@ -904,7 +986,118 @@ html { scrollbar-width: thin; scrollbar-color: var(--gold-dim) var(--black-void)
 }
 
 /* ----------------------------------------------------------------
-   11. ENDING
+   11. MOSAIC (zoomable surprise before the ending)
+   ---------------------------------------------------------------- */
+.mosaic {
+  position: relative;
+  padding: clamp(5rem, 14vh, 8rem) var(--gutter);
+  max-width: var(--container-max);
+  margin: 0 auto;
+  overflow: hidden;
+}
+.mosaic__glow {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  width: 60vw;
+  height: 60vw;
+  max-width: 700px;
+  max-height: 700px;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, rgba(201,169,97,0.10), transparent 70%);
+  filter: blur(30px);
+  pointer-events: none;
+}
+.mosaic__header { position: relative; text-align: center; margin-bottom: clamp(2.5rem, 8vh, 4rem); }
+.mosaic__header .section-lede { margin-left: auto; margin-right: auto; }
+
+.mosaic__viewer {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  max-width: 720px;
+  margin: 0 auto;
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--black-rich);
+  border: 1px solid rgba(201,169,97,0.18);
+  box-shadow:
+    0 40px 100px -30px rgba(0,0,0,0.75),
+    0 0 0 1px rgba(201,169,97,0.05),
+    0 0 60px rgba(201,169,97,0.06);
+  touch-action: none;
+  cursor: zoom-in;
+}
+.mosaic__viewer.is-zoomed { cursor: grab; }
+.mosaic__viewer.is-panning { cursor: grabbing; }
+
+.mosaic__canvas {
+  width: 100%;
+  height: 100%;
+  will-change: transform;
+}
+.mosaic__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+.mosaic__hint {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.6em 1.1em;
+  border-radius: 999px;
+  background: rgba(10, 8, 6, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid var(--gold-line);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--white-dim);
+  pointer-events: none;
+  transition: opacity 0.6s var(--ease-soft);
+  animation: mosaicHintPulse 2.6s ease-in-out infinite;
+}
+.mosaic__hint-icon { color: var(--gold); }
+.mosaic__hint.is-hidden { opacity: 0; }
+@keyframes mosaicHintPulse {
+  0%, 100% { opacity: 0.85; transform: translateX(-50%) translateY(0); }
+  50% { opacity: 1; transform: translateX(-50%) translateY(-3px); }
+}
+
+.mosaic__reset {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  padding: 0.5em 1em;
+  font-size: 0.65rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--white-dim);
+  background: rgba(10, 8, 6, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid var(--gold-line);
+  border-radius: 999px;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 0.4s var(--ease-soft), transform 0.4s var(--ease-soft), border-color 0.3s;
+  pointer-events: none;
+}
+.mosaic__reset.is-visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.mosaic__reset:hover { border-color: var(--gold); color: var(--gold-bright); }
+
+/* ----------------------------------------------------------------
+   12. ENDING
    ---------------------------------------------------------------- */
 .ending {
   position: relative;
@@ -1006,7 +1199,7 @@ html { scrollbar-width: thin; scrollbar-color: var(--gold-dim) var(--black-void)
 }
 
 /* ----------------------------------------------------------------
-   12. RESPONSIVE REFINEMENTS
+   13. RESPONSIVE REFINEMENTS
    ---------------------------------------------------------------- */
 @media (min-width: 1024px) {
   .story__header, .gallery__header, .videos__header, .letter__header { margin-bottom: 6rem; }
