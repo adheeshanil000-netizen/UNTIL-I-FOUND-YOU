@@ -1,237 +1,423 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0a0806">
+<title>Happy Birthday, Annnaaammoo ❤️</title>
+<meta name="description" content="A love letter to Annnaaammoo, from Aadhi.">
 
-<title>Happy Birthday Annnaaammoo ❤️</title>
+<!-- Preload core fonts for luxury typography -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Cormorant+SC:wght@500;600&family=Tenor+Sans&family=Dancing+Script:wght@500;600;700&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="style.css">
-
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-
 </head>
-
 <body>
 
-<!-- INTRO -->
+<!-- ============================================================ -->
+<!-- LUXURY CUSTOM CURSOR GLOW (desktop only, controlled by JS)     -->
+<!-- ============================================================ -->
+<div class="cursor-glow" aria-hidden="true"></div>
 
-<section id="intro">
-
-<div class="overlay"></div>
-
-<div class="intro-content">
-
-<div class="heart">
-❤️
+<!-- ============================================================ -->
+<!-- AMBIENT BACKGROUND LAYERS (particles / light rays / grain)     -->
+<!-- ============================================================ -->
+<div class="ambient-layer" aria-hidden="true">
+  <canvas id="particle-canvas"></canvas>
+  <div class="light-ray ray-1"></div>
+  <div class="light-ray ray-2"></div>
+  <div class="grain-overlay"></div>
 </div>
 
-<h3>
-Every love story has a beginning...
-</h3>
-
-<h1>
-Ours became my favorite.
-</h1>
-
-<button id="beginBtn">
-Begin Our Story
-</button>
-
-</div>
-
-</section>
-
-<audio id="bgMusic" loop>
-
-<source src="assets/music/until-i-found-you.mp3" type="audio/mpeg">
-
+<!-- ============================================================ -->
+<!-- BACKGROUND MUSIC (does NOT autoplay — starts on user action)  -->
+<!-- ============================================================ -->
+<audio id="bg-music" loop preload="none">
+  <source src="assets/music/until-i-found-you.mp3" type="audio/mpeg">
 </audio>
 
-<!-- WEBSITE -->
+<!-- Floating sound toggle, appears after intro -->
+<button id="sound-toggle" class="sound-toggle is-hidden" aria-label="Toggle background music" aria-pressed="true">
+  <span class="sound-toggle__bars" aria-hidden="true">
+    <i></i><i></i><i></i><i></i>
+  </span>
+</button>
 
-<div id="website">
+<!-- ============================================================ -->
+<!-- SECTION 0 — CINEMATIC INTRO / GATE                             -->
+<!-- ============================================================ -->
+<section id="intro" class="intro" aria-label="Introduction">
+  <div class="intro__glow" aria-hidden="true"></div>
+  <div class="intro__heart" aria-hidden="true">
+    <svg viewBox="0 0 32 29" class="heart-svg">
+      <path d="M16 28.5C16 28.5 1 19.2 1 8.9C1 3.9 5 0 9.8 0C12.9 0 15.2 1.6 16 3.9C16.8 1.6 19.1 0 22.2 0C27 0 31 3.9 31 8.9C31 19.2 16 28.5 16 28.5Z"/>
+    </svg>
+  </div>
 
-<!-- HERO -->
+  <div class="intro__copy">
+    <p class="intro__line" data-line="1">Every love story has a beginning&hellip;</p>
+    <p class="intro__line" data-line="2">Ours became my favorite.</p>
+  </div>
 
-<section class="hero">
+  <button id="begin-btn" class="btn-luxury intro__cta" type="button">
+    <span class="btn-luxury__icon">❤️</span>
+    <span class="btn-luxury__text">Begin Our Story</span>
+    <span class="btn-luxury__shine" aria-hidden="true"></span>
+  </button>
 
-<img src="assets/images/hero.jpg" class="hero-image">
-
-<div class="hero-overlay">
-
-<h4>
-Happy Birthday
-</h4>
-
-<h1>
-Annnaaammoo ❤️
-</h1>
-
-<p>
-
-Every memory here
-is a piece
-of my heart.
-
-</p>
-
-</div>
-
+  <p class="intro__hint">tap to enter, with sound</p>
 </section>
 
-<!-- STORY -->
-
-<section class="story">
-
-<h2>
-
-Our Story
-
-</h2>
-
-<div class="memory">
-
-❤️ First Message
-
-</div>
-
-<div class="memory">
-
-☕ First Coffee
-
-</div>
-
-<div class="memory">
-
-🤍 First Hug
-
-</div>
-
-<div class="memory">
-
-😅 First Fight
-
-</div>
-
-<div class="memory">
-
-✈️ First Trip
-
-</div>
-
-<div class="memory">
-
-😂 Endless Laughs
-
-</div>
-
-<div class="memory">
-
-❤️ Every Beautiful Memory
-
-</div>
-
-</section>
-
-<!-- LETTER -->
-
-<section class="letter">
-
-<h2>
-
-To My Annnaaammoo ❤️
-
-</h2>
-
-<p>
-
-Coming Soon...
-
-</p>
-
-</section>
-
-<!-- GALLERY -->
-
-<section class="gallery">
-
-<h2>
-
-Our Gallery
-
-</h2>
-
-<div class="gallery-grid">
-
-<!-- Photos -->
-
-</div>
-
-</section>
-
-<!-- VIDEO -->
-
-<section class="video">
-
-<h2>
-
-Our Favourite Moments
-
-</h2>
-
-<video controls>
-
-<source src="assets/videos/video.mp4" type="video/mp4">
-
-</video>
-
-</section>
-
-<!-- END -->
-
-<section class="ending">
-
-<h2>
-
-Happy Birthday ❤️
-
-</h2>
-
-<h1>
-
-My World.
-
-</h1>
-
-<h1>
-
-My Safe Place.
-
-</h1>
-
-<h1>
-
-My Annnaaammoo.
-
-</h1>
-
-<p>
-
-Forever Yours,
-
-<br><br>
-
-Aadhi ❤️
-
-</p>
-
-</section>
-
-</div>
+<!-- ============================================================ -->
+<!-- MAIN EXPERIENCE (hidden until intro is dismissed)              -->
+<!-- ============================================================ -->
+<main id="main-experience" class="main-experience" aria-hidden="true">
+
+  <!-- Scroll progress + nav dot rail -->
+  <div class="progress-rail" aria-hidden="true">
+    <div class="progress-rail__fill" id="progress-fill"></div>
+  </div>
+
+  <!-- ========================================================== -->
+  <!-- HERO                                                        -->
+  <!-- ========================================================== -->
+  <section id="hero" class="hero" data-reveal>
+    <div class="hero__media">
+      <img
+        src="assets/images/hero.jpg"
+        alt="A quiet, golden-lit portrait — the opening frame of our story"
+        class="hero__img"
+        id="hero-img"
+      >
+      <div class="hero__overlay"></div>
+      <div class="hero__vignette"></div>
+    </div>
+
+    <div class="hero__content">
+      <p class="hero__eyebrow" data-split-text>A Story, For You</p>
+      <h1 class="hero__title">
+        <span class="hero__title-line" data-split-text>Happy Birthday</span>
+        <span class="hero__title-line hero__title-line--script" data-split-text>Annnaaammoo ❤️</span>
+      </h1>
+      <p class="hero__subtitle" data-split-text>
+        Every memory here<br>
+        is a piece<br>
+        of my heart.
+      </p>
+    </div>
+
+    <div class="hero__scroll-cue" aria-hidden="true">
+      <span class="hero__scroll-line"></span>
+      <span class="hero__scroll-text">scroll</span>
+    </div>
+  </section>
+
+  <!-- ========================================================== -->
+  <!-- OUR STORY — CINEMATIC CHAPTERS                              -->
+  <!-- ========================================================== -->
+  <section id="story" class="story" aria-label="Our Story">
+
+    <header class="story__header" data-reveal>
+      <p class="section-eyebrow">Chapter Index</p>
+      <h2 class="section-title">Our Story</h2>
+      <p class="section-lede">A timeline of the small moments that quietly became everything.</p>
+    </header>
+
+    <div class="timeline" id="timeline">
+      <div class="timeline__spine" aria-hidden="true">
+        <div class="timeline__spine-fill" id="timeline-fill"></div>
+      </div>
+
+      <!-- Chapter 01 -->
+      <article class="chapter" data-reveal data-chapter="01">
+        <div class="chapter__marker" aria-hidden="true">
+          <span class="chapter__marker-icon">❤️</span>
+        </div>
+        <div class="chapter__media">
+          <div class="chapter__media-frame">
+            <img src="assets/images/chapter-01-a.jpg" alt="The first message we ever exchanged" class="chapter__img" data-kenburns>
+            <img src="assets/images/chapter-01-b.jpg" alt="A moment from our first conversations" class="chapter__img chapter__img--secondary" data-kenburns>
+          </div>
+        </div>
+        <div class="chapter__content">
+          <span class="chapter__index">01</span>
+          <h3 class="chapter__title">First Message</h3>
+          <p class="chapter__quote">&ldquo;I didn't know a single sentence could change everything.&rdquo;</p>
+          <div class="chapter__divider" aria-hidden="true"></div>
+        </div>
+      </article>
+
+      <!-- Chapter 02 -->
+      <article class="chapter chapter--reverse" data-reveal data-chapter="02">
+        <div class="chapter__marker" aria-hidden="true">
+          <span class="chapter__marker-icon">☕</span>
+        </div>
+        <div class="chapter__media">
+          <div class="chapter__media-frame">
+            <img src="assets/images/chapter-02-a.jpg" alt="Our first coffee together" class="chapter__img" data-kenburns>
+            <img src="assets/images/chapter-02-b.jpg" alt="Another frame from that first coffee" class="chapter__img chapter__img--secondary" data-kenburns>
+          </div>
+        </div>
+        <div class="chapter__content">
+          <span class="chapter__index">02</span>
+          <h3 class="chapter__title">First Coffee</h3>
+          <p class="chapter__quote">&ldquo;Two cups, one table, and hours that felt like minutes.&rdquo;</p>
+          <div class="chapter__divider" aria-hidden="true"></div>
+        </div>
+      </article>
+
+      <!-- Chapter 03 -->
+      <article class="chapter" data-reveal data-chapter="03">
+        <div class="chapter__marker" aria-hidden="true">
+          <span class="chapter__marker-icon">🤍</span>
+        </div>
+        <div class="chapter__media">
+          <div class="chapter__media-frame">
+            <img src="assets/images/chapter-03-a.jpg" alt="Our first hug" class="chapter__img" data-kenburns>
+            <img src="assets/images/chapter-03-b.jpg" alt="A second frame of that first hug" class="chapter__img chapter__img--secondary" data-kenburns>
+          </div>
+        </div>
+        <div class="chapter__content">
+          <span class="chapter__index">03</span>
+          <h3 class="chapter__title">First Hug</h3>
+          <p class="chapter__quote">&ldquo;For a second, the whole world went quiet.&rdquo;</p>
+          <div class="chapter__divider" aria-hidden="true"></div>
+        </div>
+      </article>
+
+      <!-- Chapter 04 -->
+      <article class="chapter chapter--reverse" data-reveal data-chapter="04">
+        <div class="chapter__marker" aria-hidden="true">
+          <span class="chapter__marker-icon">😅</span>
+        </div>
+        <div class="chapter__media">
+          <div class="chapter__media-frame">
+            <img src="assets/images/chapter-04-a.jpg" alt="A photo from the day of our first fight" class="chapter__img" data-kenburns>
+            <img src="assets/images/chapter-04-b.jpg" alt="The moment we made up" class="chapter__img chapter__img--secondary" data-kenburns>
+          </div>
+        </div>
+        <div class="chapter__content">
+          <span class="chapter__index">04</span>
+          <h3 class="chapter__title">First Fight</h3>
+          <p class="chapter__quote">&ldquo;We learned how to be angry and still choose each other.&rdquo;</p>
+          <div class="chapter__divider" aria-hidden="true"></div>
+        </div>
+      </article>
+
+      <!-- Chapter 05 -->
+      <article class="chapter" data-reveal data-chapter="05">
+        <div class="chapter__marker" aria-hidden="true">
+          <span class="chapter__marker-icon">✈️</span>
+        </div>
+        <div class="chapter__media">
+          <div class="chapter__media-frame">
+            <img src="assets/images/chapter-05-a.jpg" alt="Our first trip together" class="chapter__img" data-kenburns>
+            <img src="assets/images/chapter-05-b.jpg" alt="A view from our first trip" class="chapter__img chapter__img--secondary" data-kenburns>
+          </div>
+        </div>
+        <div class="chapter__content">
+          <span class="chapter__index">05</span>
+          <h3 class="chapter__title">First Trip</h3>
+          <p class="chapter__quote">&ldquo;New places, same hand to hold.&rdquo;</p>
+          <div class="chapter__divider" aria-hidden="true"></div>
+        </div>
+      </article>
+
+      <!-- Chapter 06 -->
+      <article class="chapter chapter--reverse" data-reveal data-chapter="06">
+        <div class="chapter__marker" aria-hidden="true">
+          <span class="chapter__marker-icon">😂</span>
+        </div>
+        <div class="chapter__media">
+          <div class="chapter__media-frame">
+            <img src="assets/images/chapter-06-a.jpg" alt="A candid laughing photo" class="chapter__img" data-kenburns>
+            <img src="assets/images/chapter-06-b.jpg" alt="Another candid laughing photo" class="chapter__img chapter__img--secondary" data-kenburns>
+          </div>
+        </div>
+        <div class="chapter__content">
+          <span class="chapter__index">06</span>
+          <h3 class="chapter__title">Endless Laughs</h3>
+          <p class="chapter__quote">&ldquo;You are, without question, the funniest part of my day.&rdquo;</p>
+          <div class="chapter__divider" aria-hidden="true"></div>
+        </div>
+      </article>
+
+      <!-- Chapter 07 -->
+      <article class="chapter" data-reveal data-chapter="07">
+        <div class="chapter__marker" aria-hidden="true">
+          <span class="chapter__marker-icon">❤️</span>
+        </div>
+        <div class="chapter__media">
+          <div class="chapter__media-frame">
+            <img src="assets/images/chapter-07-a.jpg" alt="A cherished memory together" class="chapter__img" data-kenburns>
+            <img src="assets/images/chapter-07-b.jpg" alt="Another cherished memory together" class="chapter__img chapter__img--secondary" data-kenburns>
+          </div>
+        </div>
+        <div class="chapter__content">
+          <span class="chapter__index">07</span>
+          <h3 class="chapter__title">Every Beautiful Memory</h3>
+          <p class="chapter__quote">&ldquo;And a hundred more still waiting to be made.&rdquo;</p>
+          <div class="chapter__divider" aria-hidden="true"></div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ========================================================== -->
+  <!-- LETTER                                                      -->
+  <!-- ========================================================== -->
+  <section id="letter" class="letter" aria-label="A Letter For You" data-reveal>
+    <div class="letter__backdrop" aria-hidden="true"></div>
+    <header class="letter__header" data-reveal>
+      <p class="section-eyebrow">In My Own Words</p>
+      <h2 class="section-title section-title--light">A Letter For You</h2>
+    </header>
+
+    <div class="letter__paper" data-reveal>
+      <div class="letter__paper-texture" aria-hidden="true"></div>
+      <p class="letter__salutation">My Annnaaammoo,</p>
+      <p class="letter__body">
+        [ Replace this paragraph with your own words. Write about the first time
+        you knew — the small, ordinary moment that quietly became the beginning
+        of everything. Let it sound like you. ]
+      </p>
+      <p class="letter__body">
+        [ Replace this paragraph with a memory only the two of you would
+        understand. It doesn't need to be poetic — it needs to be true. ]
+      </p>
+      <p class="letter__body">
+        [ Replace this paragraph with what you hope for the year ahead — for her,
+        for the two of you, for whatever comes next. ]
+      </p>
+      <p class="letter__signoff">Forever yours,<br><span class="letter__signature">Aadhi</span></p>
+    </div>
+  </section>
+
+  <!-- ========================================================== -->
+  <!-- PHOTO GALLERY                                               -->
+  <!-- ========================================================== -->
+  <section id="gallery" class="gallery" aria-label="Photo Gallery" data-reveal>
+    <header class="gallery__header" data-reveal>
+      <p class="section-eyebrow">Frame by Frame</p>
+      <h2 class="section-title">The Gallery</h2>
+      <p class="section-lede">A thousand small proofs that this is real.</p>
+    </header>
+
+    <div class="gallery__grid" id="gallery-grid">
+      <!-- Replace src values with real photos. Add/remove figures freely. -->
+      <figure class="gallery__item" data-index="0">
+        <img src="assets/images/gallery-01.jpg" alt="Gallery photo 1" loading="lazy">
+      </figure>
+      <figure class="gallery__item" data-index="1">
+        <img src="assets/images/gallery-02.jpg" alt="Gallery photo 2" loading="lazy">
+      </figure>
+      <figure class="gallery__item" data-index="2">
+        <img src="assets/images/gallery-03.jpg" alt="Gallery photo 3" loading="lazy">
+      </figure>
+      <figure class="gallery__item" data-index="3">
+        <img src="assets/images/gallery-04.jpg" alt="Gallery photo 4" loading="lazy">
+      </figure>
+      <figure class="gallery__item" data-index="4">
+        <img src="assets/images/gallery-05.jpg" alt="Gallery photo 5" loading="lazy">
+      </figure>
+      <figure class="gallery__item" data-index="5">
+        <img src="assets/images/gallery-06.jpg" alt="Gallery photo 6" loading="lazy">
+      </figure>
+      <figure class="gallery__item" data-index="6">
+        <img src="assets/images/gallery-07.jpg" alt="Gallery photo 7" loading="lazy">
+      </figure>
+      <figure class="gallery__item" data-index="7">
+        <img src="assets/images/gallery-08.jpg" alt="Gallery photo 8" loading="lazy">
+      </figure>
+      <figure class="gallery__item" data-index="8">
+        <img src="assets/images/gallery-09.jpg" alt="Gallery photo 9" loading="lazy">
+      </figure>
+    </div>
+  </section>
+
+  <!-- Lightbox (populated + controlled by script.js) -->
+  <div id="lightbox" class="lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Photo viewer">
+    <button class="lightbox__close" id="lightbox-close" aria-label="Close photo viewer">&times;</button>
+    <button class="lightbox__nav lightbox__nav--prev" id="lightbox-prev" aria-label="Previous photo">&#10094;</button>
+    <div class="lightbox__stage">
+      <img src="" alt="" id="lightbox-img" class="lightbox__img">
+    </div>
+    <button class="lightbox__nav lightbox__nav--next" id="lightbox-next" aria-label="Next photo">&#10095;</button>
+    <div class="lightbox__counter" id="lightbox-counter" aria-hidden="true"></div>
+  </div>
+
+  <!-- ========================================================== -->
+  <!-- VIDEOS                                                      -->
+  <!-- ========================================================== -->
+  <section id="videos" class="videos" aria-label="Videos" data-reveal>
+    <header class="videos__header" data-reveal>
+      <p class="section-eyebrow">In Motion</p>
+      <h2 class="section-title">Moments That Moved</h2>
+    </header>
+
+    <div class="videos__grid">
+      <div class="video-card" data-reveal>
+        <video
+          class="video-card__player"
+          poster="assets/images/video-01-poster.jpg"
+          controls
+          playsinline
+          preload="none"
+        >
+          <source src="assets/videos/memory-01.mp4" type="video/mp4">
+        </video>
+        <p class="video-card__caption">Replace with a caption for this video</p>
+      </div>
+
+      <div class="video-card" data-reveal>
+        <video
+          class="video-card__player"
+          poster="assets/images/video-02-poster.jpg"
+          controls
+          playsinline
+          preload="none"
+        >
+          <source src="assets/videos/memory-02.mp4" type="video/mp4">
+        </video>
+        <p class="video-card__caption">Replace with a caption for this video</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================== -->
+  <!-- ENDING                                                      -->
+  <!-- ========================================================== -->
+  <section id="ending" class="ending" aria-label="Closing" data-reveal>
+    <canvas id="stars-canvas" class="ending__stars" aria-hidden="true"></canvas>
+    <div class="ending__glow" aria-hidden="true"></div>
+
+    <div class="ending__content">
+      <p class="ending__line" data-line>Happy Birthday</p>
+      <p class="ending__line ending__line--script" data-line>My World.</p>
+      <p class="ending__line ending__line--script" data-line>My Safe Place.</p>
+      <p class="ending__line ending__line--script" data-line>My Annnaaammoo.</p>
+      <p class="ending__heart" data-line>❤️</p>
+
+      <div class="ending__divider" aria-hidden="true"></div>
+
+      <p class="ending__line ending__line--small" data-line>If I had to choose again&hellip;</p>
+      <p class="ending__line ending__line--small" data-line>I'd still choose you.</p>
+      <p class="ending__line ending__line--emphasis" data-line>Every.</p>
+      <p class="ending__line ending__line--emphasis" data-line>Single.</p>
+      <p class="ending__line ending__line--emphasis" data-line>Time.</p>
+
+      <div class="ending__signoff" data-line>
+        <p class="ending__signoff-label">Forever Yours,</p>
+        <p class="ending__signoff-name">Aadhi ❤️</p>
+      </div>
+    </div>
+  </section>
+
+</main>
 
 <script src="script.js"></script>
-
 </body>
 </html>
