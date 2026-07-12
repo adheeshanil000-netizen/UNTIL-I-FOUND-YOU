@@ -388,6 +388,38 @@
   </section>
 
   <!-- ========================================================== -->
+  <!-- MOSAIC — a zoomable surprise, right before the ending        -->
+  <!-- ========================================================== -->
+  <section id="mosaic" class="mosaic" aria-label="A Closer Look" data-reveal>
+    <div class="mosaic__glow" aria-hidden="true"></div>
+
+    <header class="mosaic__header" data-reveal>
+      <p class="section-eyebrow">One Last Thing</p>
+      <h2 class="section-title">Look Closer</h2>
+      <p class="section-lede">This isn't just one picture. Zoom in — there's more than one memory hiding here.</p>
+    </header>
+
+    <div class="mosaic__viewer" id="mosaic-viewer" data-reveal>
+      <div class="mosaic__canvas" id="mosaic-canvas">
+        <img
+          src="assets/images/mosaic.jpg"
+          alt="A photo mosaic made of many small memories together"
+          class="mosaic__img"
+          id="mosaic-img"
+          draggable="false"
+        >
+      </div>
+      <div class="mosaic__hint" id="mosaic-hint">
+        <span class="mosaic__hint-icon" aria-hidden="true">✦</span>
+        <span class="mosaic__hint-text">pinch or scroll to zoom</span>
+      </div>
+      <button class="mosaic__reset" id="mosaic-reset" type="button" aria-label="Reset zoom">
+        Reset
+      </button>
+    </div>
+  </section>
+
+  <!-- ========================================================== -->
   <!-- ENDING                                                      -->
   <!-- ========================================================== -->
   <section id="ending" class="ending" aria-label="Closing" data-reveal>
