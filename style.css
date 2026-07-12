@@ -369,5 +369,45 @@ font-size:20px;
 padding:25px;
 
 }
+body{
+    background:
+    radial-gradient(circle at top,#2b2110 0%,#0b0b0b 35%,#000 100%);
+}
+
+section{
+    position:relative;
+    overflow:hidden;
+}
+
+section::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+    radial-gradient(circle at 20% 20%,rgba(255,215,120,.08),transparent 40%),
+    radial-gradient(circle at 80% 80%,rgba(255,215,120,.05),transparent 40%);
+    pointer-events:none;
+}
+
+.memory-card{
+    background:rgba(255,255,255,.05);
+    backdrop-filter:blur(18px);
+    border:1px solid rgba(255,215,120,.15);
+    box-shadow:0 15px 40px rgba(0,0,0,.35);
+    transition:.5s ease;
+}
+
+.memory-card:hover{
+    transform:translateY(-8px) scale(1.02);
+    box-shadow:0 20px 60px rgba(255,215,120,.25);
+}
+
+img{
+    transition:transform 8s ease;
+}
+
+img:hover{
+    transform:scale(1.05);
+}
 
 }
