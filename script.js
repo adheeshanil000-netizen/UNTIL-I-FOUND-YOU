@@ -509,6 +509,220 @@
   })();
 
   /* ------------------------------------------------------------
+     GLASS PANEL TILT — subtle pointer-tracked 3D tilt + glow follow
+     ------------------------------------------------------------ */
+  (function initGlassTilt() {
+    if (prefersReducedMotion || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+    const panels = $$('.glass-panel');
+    const MAX_TILT = 6; // degrees
+
+    panels.forEach((panel) => {
+      let rect = null;
+
+      panel.addEventListener('pointerenter', () => {
+        rect = panel.getBoundingClientRect();
+        panel.classList.add('is-active-glass');
+      });
+
+      panel.addEventListener('pointermove', (e) => {
+        if (!rect) rect = panel.getBoundingClientRect();
+        const px = (e.clientX - rect.left) / rect.width; // 0-1
+        const py = (e.clientY - rect.top) / rect.height;  // 0-1
+
+        const rotateY = (px - 0.5) * MAX_TILT * 2;
+        const rotateX = (0.5 - py) * MAX_TILT * 2;
+
+        panel.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-2px)`;
+        panel.style.setProperty('--glow-x', `${px * 100}%`);
+        panel.style.setProperty('--glow-y', `${py * 100}%`);
+      });
+
+      panel.addEventListener('pointerleave', () => {
+        panel.classList.remove('is-active-glass');
+        panel.style.transform = '';
+        rect = null;
+      });
+    });
+  })();
+
+  /* ------------------------------------------------------------
+     MOSAIC — pinch / scroll to zoom, drag to pan
+     ------------------------------------------------------------ */
+  (function initMosaicZoom() {
+    const viewer = $('#mosaic-viewer');
+    const canvas = $('#mosaic-canvas');
+    const hint = $('#mosaic-hint');
+    const resetBtn = $('#mosaic-reset');
+    if (!viewer || !canvas) return;
+
+    const MIN_SCALE = 1;
+    const MAX_SCALE = 4;
+
+    let scale = 1;
+    let originX = 0;
+    let originY = 0;
+    let startX = 0;
+    let startY = 0;
+    let isPanning = false;
+    let hasInteracted = false;
+
+    function applyTransform() {
+      canvas.style.transform = `translate(${originX}px, ${originY}px) scale(${scale})`;
+    }
+
+    function clampOrigin() {
+      const rect = viewer.getBoundingClientRect();
+      const maxX = (rect.width * (scale - 1)) / 2;
+      const maxY = (rect.height * (scale - 1)) / 2;
+      originX = Math.min(Math.max(originX, -maxX), maxX);
+      originY = Math.min(Math.max(originY, -maxY), maxY);
+    }
+
+    function markInteracted() {
+      if (hasInteracted) return;
+      hasInteracted = true;
+      hint.classList.add('is-hidden');
+    }
+
+    function updateUIState() {
+      viewer.classList.toggle('is-zoomed', scale > MIN_SCALE + 0.01);
+      resetBtn.classList.toggle('is-visible', scale > MIN_SCALE + 0.01);
+    }
+
+    function setScale(newScale, focalX, focalY) {
+      const rect = viewer.getBoundingClientRect();
+      const prevScale = scale;
+      scale = Math.min(Math.max(newScale, MIN_SCALE), MAX_SCALE);
+
+      if (focalX !== undefined && focalY !== undefined) {
+        const cx = focalX - rect.left - rect.width / 2;
+        const cy = focalY - rect.top - rect.height / 2;
+        const ratio = scale / prevScale;
+        originX = cx - (cx - originX) * ratio;
+        originY = cy - (cy - originY) * ratio;
+      }
+
+      if (scale === MIN_SCALE) {
+        originX = 0;
+        originY = 0;
+      }
+      clampOrigin();
+      applyTransform();
+      updateUIState();
+    }
+
+    function resetZoom() {
+      scale = MIN_SCALE;
+      originX = 0;
+      originY = 0;
+      applyTransform();
+      updateUIState();
+    }
+
+    resetBtn.addEventListener('click', resetZoom);
+
+    /* Desktop: scroll wheel to zoom, drag to pan when zoomed */
+    viewer.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      markInteracted();
+      const delta = -e.deltaY * 0.0016;
+      setScale(scale + delta * scale, e.clientX, e.clientY);
+    }, { passive: false });
+
+    viewer.addEventListener('mousedown', (e) => {
+      if (scale <= MIN_SCALE) return;
+      isPanning = true;
+      viewer.classList.add('is-panning');
+      startX = e.clientX - originX;
+      startY = e.clientY - originY;
+    });
+    window.addEventListener('mousemove', (e) => {
+      if (!isPanning) return;
+      originX = e.clientX - startX;
+      originY = e.clientY - startY;
+      clampOrigin();
+      applyTransform();
+    });
+    window.addEventListener('mouseup', () => {
+      isPanning = false;
+      viewer.classList.remove('is-panning');
+    });
+
+    /* Double-click to zoom in/out on desktop */
+    viewer.addEventListener('dblclick', (e) => {
+      markInteracted();
+      if (scale > MIN_SCALE) {
+        resetZoom();
+      } else {
+        setScale(2.4, e.clientX, e.clientY);
+      }
+    });
+
+    /* Touch: pinch to zoom, drag to pan, double-tap to zoom */
+    let touchStartDist = 0;
+    let touchStartScale = 1;
+    let lastTapTime = 0;
+    let singleTouchStartX = 0;
+    let singleTouchStartY = 0;
+
+    function getTouchDist(touches) {
+      const dx = touches[0].clientX - touches[1].clientX;
+      const dy = touches[0].clientY - touches[1].clientY;
+      return Math.hypot(dx, dy);
+    }
+    function getTouchMidpoint(touches) {
+      return {
+        x: (touches[0].clientX + touches[1].clientX) / 2,
+        y: (touches[0].clientY + touches[1].clientY) / 2,
+      };
+    }
+
+    viewer.addEventListener('touchstart', (e) => {
+      markInteracted();
+      if (e.touches.length === 2) {
+        touchStartDist = getTouchDist(e.touches);
+        touchStartScale = scale;
+      } else if (e.touches.length === 1) {
+        const now = Date.now();
+        if (now - lastTapTime < 320) {
+          // Double tap
+          const touch = e.touches[0];
+          if (scale > MIN_SCALE) {
+            resetZoom();
+          } else {
+            setScale(2.4, touch.clientX, touch.clientY);
+          }
+        }
+        lastTapTime = now;
+        singleTouchStartX = e.touches[0].clientX - originX;
+        singleTouchStartY = e.touches[0].clientY - originY;
+      }
+    }, { passive: true });
+
+    viewer.addEventListener('touchmove', (e) => {
+      if (e.touches.length === 2) {
+        e.preventDefault();
+        const dist = getTouchDist(e.touches);
+        const mid = getTouchMidpoint(e.touches);
+        const newScale = touchStartScale * (dist / touchStartDist);
+        setScale(newScale, mid.x, mid.y);
+      } else if (e.touches.length === 1 && scale > MIN_SCALE) {
+        e.preventDefault();
+        originX = e.touches[0].clientX - singleTouchStartX;
+        originY = e.touches[0].clientY - singleTouchStartY;
+        clampOrigin();
+        applyTransform();
+      }
+    }, { passive: false });
+
+    window.addEventListener('resize', () => {
+      clampOrigin();
+      applyTransform();
+    });
+  })();
+
+  /* ------------------------------------------------------------
      VIDEO ↔ MUSIC DUCKING
      Music pauses when a video plays, resumes when it's paused/ended.
      ------------------------------------------------------------ */
