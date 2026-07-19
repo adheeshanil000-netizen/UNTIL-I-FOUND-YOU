@@ -158,7 +158,32 @@
     initScrollReveals();
     initTimelineProgress();
     initProgressRail();
+
+    // Fallback: if the browser blocked the earlier autoplay attempt,
+    // surface an explicit "Play Our Song" prompt tied to its own direct tap.
+    await wait(700);
+    if (bgMusic && bgMusic.paused) {
+      playSongPrompt.classList.remove('is-hidden');
+    }
   }, { once: true });
+
+  const playSongPrompt = $('#play-song-prompt');
+  const playSongBtn = $('#play-song-btn');
+
+  if (playSongBtn) {
+    playSongBtn.addEventListener('click', () => {
+      // Call play() synchronously, directly inside this tap handler —
+      // this is what makes it reliable on iOS/Safari even when an
+      // earlier async-chained play() attempt was silently blocked.
+      const playResult = bgMusic.play();
+      if (playResult && typeof playResult.then === 'function') {
+        playResult
+          .then(() => fadeAudio(bgMusic, 0.55, 1200))
+          .catch(() => {});
+      }
+      playSongPrompt.classList.add('is-hidden');
+    });
+  }
 
   /* ------------------------------------------------------------
      SOUND TOGGLE
@@ -592,6 +617,67 @@
         rect = null;
       });
     });
+  })();
+
+  /* ------------------------------------------------------------
+     RATING SLIDER — live value, mood-based reactions
+     ------------------------------------------------------------ */
+  (function initRatingSlider() {
+    const slider = $('#rating-slider');
+    const valueEl = $('#rating-value');
+    const messageEl = $('#rating-message');
+    const heartsContainer = $('#rating-hearts');
+    if (!slider) return;
+
+    let hasInteracted = false;
+
+    function messageFor(val) {
+      if (val < 7) return { text: 'oww better than that infused chicken uh😒', mood: 'is-low' };
+      if (val === 7) return { text: 'just like that infused chicken uhh🙂', mood: 'is-mid' };
+      return { text: 'So this is better than your infused chicken 😍😁', mood: 'is-high' };
+    }
+
+    function spawnHearts(count) {
+      for (let i = 0; i < count; i++) {
+        const heart = document.createElement('span');
+        heart.className = 'rating__heart-particle';
+        heart.textContent = ['❤️', '💛', '✨'][i % 3];
+        heart.style.setProperty('--drift', `${(Math.random() - 0.5) * 70}px`);
+        heart.style.animationDelay = `${i * 0.1}s`;
+        heartsContainer.appendChild(heart);
+        setTimeout(() => heart.remove(), 1600);
+      }
+    }
+
+    function updateUI(val, { fromInteraction = false } = {}) {
+      const fillPct = (val / 10) * 100;
+      slider.style.setProperty('--fill', `${fillPct}%`);
+
+      valueEl.textContent = val.toFixed(1);
+      valueEl.classList.remove('is-pulsing');
+      void valueEl.offsetWidth;
+      valueEl.classList.add('is-pulsing');
+
+      if (!fromInteraction && !hasInteracted) return;
+
+      const { text, mood } = messageFor(val);
+      messageEl.textContent = text;
+      messageEl.classList.remove('is-low', 'is-mid', 'is-high', 'is-updating');
+      void messageEl.offsetWidth;
+      messageEl.classList.add(mood, 'is-updating');
+    }
+
+    slider.addEventListener('input', () => {
+      hasInteracted = true;
+      updateUI(parseFloat(slider.value), { fromInteraction: true });
+    });
+
+    slider.addEventListener('change', () => {
+      const val = parseFloat(slider.value);
+      if (val > 7) spawnHearts(6);
+    });
+
+    updateUI(parseFloat(slider.value));
   })();
 
   /* ------------------------------------------------------------
