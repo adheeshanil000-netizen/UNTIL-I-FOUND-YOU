@@ -31,13 +31,14 @@
   <p class="lock-gate__eyebrow">Before We Begin</p>
   <h2 class="lock-gate__title">Some days write themselves into us forever.</h2>
   <p class="lock-gate__hint">Enter the date that started it all.</p>
+  <p class="lock-gate__example">e.g. 26 January 2000</p>
 
   <form id="lock-form" class="lock-gate__form" autocomplete="off" novalidate>
     <input
       type="text"
       id="lock-input"
       class="lock-gate__input glass-panel"
-      placeholder="DD MONTH YYYY"
+      placeholder="26 JANUARY 2000"
       autocapitalize="characters"
       autocomplete="off"
       spellcheck="false"
@@ -138,6 +139,15 @@
         <span class="hero__title-line" data-split-text>Happy Birthday</span>
         <span class="hero__title-line hero__title-line--script" data-split-text>Annnaaammoo ❤️</span>
       </h1>
+
+      <div id="play-song-prompt" class="play-song-prompt is-hidden" role="dialog" aria-label="Play our song">
+        <span class="play-song-prompt__icon-float" aria-hidden="true">🎵</span>
+        <p class="play-song-prompt__quote">Every good story needs a soundtrack.</p>
+        <button id="play-song-btn" class="play-song-prompt__btn" type="button">
+          <span>Click Here</span>
+        </button>
+      </div>
+
       <p class="hero__subtitle" data-split-text>
         Every memory here<br>
         is a piece<br>
@@ -419,6 +429,45 @@
         </video>
         <p class="video-card__caption">Replace with a caption for this video</p>
       </div>
+    </div>
+  </section>
+
+  <!-- ========================================================== -->
+  <!-- RATING — a playful moment right before the finale            -->
+  <!-- ========================================================== -->
+  <section id="rating" class="rating" aria-label="Rate This Story" data-reveal>
+    <div class="rating__glow" aria-hidden="true"></div>
+
+    <header class="rating__header" data-reveal>
+      <p class="section-eyebrow">Be Honest</p>
+      <h2 class="section-title">Rate This Love Story</h2>
+      <p class="section-lede">Out of 10. No pressure&hellip; okay, maybe a little.</p>
+    </header>
+
+    <div class="rating__widget glass-panel" data-reveal>
+      <div class="rating__value-display">
+        <span class="rating__value" id="rating-value">5.0</span>
+        <span class="rating__value-max">/ 10</span>
+      </div>
+
+      <input
+        type="range"
+        id="rating-slider"
+        class="rating__slider"
+        min="0" max="10" step="0.5" value="5"
+        list="rating-ticks"
+        aria-label="Rate out of 10"
+      >
+      <datalist id="rating-ticks">
+        <option value="0.0"></option><option value="0.5"></option><option value="1.0"></option><option value="1.5"></option><option value="2.0"></option><option value="2.5"></option><option value="3.0"></option><option value="3.5"></option><option value="4.0"></option><option value="4.5"></option><option value="5.0"></option><option value="5.5"></option><option value="6.0"></option><option value="6.5"></option><option value="7.0"></option><option value="7.5"></option><option value="8.0"></option><option value="8.5"></option><option value="9.0"></option><option value="9.5"></option><option value="10.0"></option>
+      </datalist>
+
+      <div class="rating__scale-labels" aria-hidden="true">
+        <span>0</span><span>5</span><span>10</span>
+      </div>
+
+      <p class="rating__message" id="rating-message">Slide to rate&hellip; ✨</p>
+      <div class="rating__hearts" id="rating-hearts" aria-hidden="true"></div>
     </div>
   </section>
 
