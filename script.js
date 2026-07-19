@@ -22,10 +22,57 @@
   }
 
   /* ------------------------------------------------------------
+     LOCK GATE — unlock with the date, then reveal the intro
+     ------------------------------------------------------------ */
+  const lockGate = $('#lock-gate');
+  const lockForm = $('#lock-form');
+  const lockInput = $('#lock-input');
+  const lockError = $('#lock-error');
+  const introSection = $('#intro');
+
+  const CORRECT_ANSWER = '22APRIL2022';
+
+  function normalizeAnswer(raw) {
+    return raw
+      .toUpperCase()
+      .replace(/[^A-Z0-9]/g, ''); // strip spaces, slashes, dashes, dots
+  }
+
+  async function unlockGate() {
+    lockGate.classList.add('is-leaving');
+    await wait(1200);
+    lockGate.classList.add('is-gone');
+
+    introSection.classList.remove('is-waiting');
+    runIntroSequence();
+  }
+
+  function rejectGuess() {
+    lockError.textContent = "That's not quite the date I remember. Try again?";
+    lockError.classList.add('is-visible');
+    lockInput.classList.add('is-shaking');
+    lockInput.value = '';
+    lockInput.focus();
+    setTimeout(() => lockInput.classList.remove('is-shaking'), 500);
+  }
+
+  if (lockForm) {
+    lockForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const guess = normalizeAnswer(lockInput.value);
+      if (guess === CORRECT_ANSWER) {
+        lockError.classList.remove('is-visible');
+        unlockGate();
+      } else {
+        rejectGuess();
+      }
+    });
+  }
+
+  /* ------------------------------------------------------------
      INTRO SEQUENCE
      ------------------------------------------------------------ */
-  const intro = $('#intro');
-  const introLines = $$('.intro__line', intro);
+  const introLines = $$('.intro__line', introSection);
   const beginBtn = $('#begin-btn');
   const introHint = $('.intro__hint');
   const mainExperience = $('#main-experience');
@@ -39,7 +86,7 @@
       return;
     }
 
-    await wait(900);
+    await wait(700);
     for (const line of introLines) {
       line.classList.add('is-visible');
       await wait(2200);
@@ -52,7 +99,8 @@
     introHint.classList.add('is-visible');
   }
 
-  runIntroSequence();
+  // Intro no longer auto-starts — it now waits for unlockGate() to call it.
+
 
   /* ------------------------------------------------------------
      BEGIN OUR STORY — dismiss intro, start music, enter experience
@@ -98,9 +146,9 @@
     beginBtn.disabled = true;
     startMusic();
 
-    intro.classList.add('is-leaving');
+    introSection.classList.add('is-leaving');
     await wait(1400);
-    intro.classList.add('is-gone');
+    introSection.classList.add('is-gone');
 
     mainExperience.setAttribute('aria-hidden', 'false');
     mainExperience.classList.add('is-active');
