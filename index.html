@@ -17,6 +17,43 @@
 <body>
 
 <!-- ============================================================ -->
+<!-- LOCK GATE — the very first screen, unlocked with a date       -->
+<!-- ============================================================ -->
+<section id="lock-gate" class="lock-gate" aria-label="Enter the date">
+  <div class="lock-gate__glow" aria-hidden="true"></div>
+
+  <div class="lock-gate__heart" aria-hidden="true">
+    <svg viewBox="0 0 32 29" class="heart-svg">
+      <path d="M16 28.5C16 28.5 1 19.2 1 8.9C1 3.9 5 0 9.8 0C12.9 0 15.2 1.6 16 3.9C16.8 1.6 19.1 0 22.2 0C27 0 31 3.9 31 8.9C31 19.2 16 28.5 16 28.5Z"/>
+    </svg>
+  </div>
+
+  <p class="lock-gate__eyebrow">Before We Begin</p>
+  <h2 class="lock-gate__title">Some days write themselves into us forever.</h2>
+  <p class="lock-gate__hint">Enter the date that started it all.</p>
+
+  <form id="lock-form" class="lock-gate__form" autocomplete="off" novalidate>
+    <input
+      type="text"
+      id="lock-input"
+      class="lock-gate__input glass-panel"
+      placeholder="DD MONTH YYYY"
+      autocapitalize="characters"
+      autocomplete="off"
+      spellcheck="false"
+      aria-label="Enter the date"
+    >
+    <button type="submit" class="btn-luxury lock-gate__submit">
+      <span class="btn-luxury__icon">🔓</span>
+      <span class="btn-luxury__text">Unlock</span>
+      <span class="btn-luxury__shine" aria-hidden="true"></span>
+    </button>
+  </form>
+
+  <p class="lock-gate__error" id="lock-error" role="alert"></p>
+</section>
+
+<!-- ============================================================ -->
 <!-- LUXURY CUSTOM CURSOR GLOW (desktop only, controlled by JS)     -->
 <!-- ============================================================ -->
 <div class="cursor-glow" aria-hidden="true"></div>
@@ -48,7 +85,7 @@
 <!-- ============================================================ -->
 <!-- SECTION 0 — CINEMATIC INTRO / GATE                             -->
 <!-- ============================================================ -->
-<section id="intro" class="intro" aria-label="Introduction">
+<section id="intro" class="intro is-waiting" aria-label="Introduction">
   <div class="intro__glow" aria-hidden="true"></div>
   <div class="intro__heart" aria-hidden="true">
     <svg viewBox="0 0 32 29" class="heart-svg">
