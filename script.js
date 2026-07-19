@@ -632,7 +632,7 @@
     let hasInteracted = false;
 
     function messageFor(val) {
-      if (val < 7) return { text: 'oww better than that infused chicken uh😒', mood: 'is-low' };
+      if (val < 7) return { text: 'oww its worst than your infused chicken ah😒😢', mood: 'is-low' };
       if (val === 7) return { text: 'just like that infused chicken uhh🙂', mood: 'is-mid' };
       return { text: 'So this is better than your infused chicken 😍😁', mood: 'is-high' };
     }
