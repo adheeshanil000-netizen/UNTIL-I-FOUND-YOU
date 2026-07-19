@@ -551,6 +551,28 @@ html { scrollbar-width: thin; scrollbar-color: var(--gold-dim) var(--black-void)
   transform: translateY(0);
 }
 
+.lock-gate__desktop-btn {
+  margin-top: 1.4rem;
+  font-family: var(--font-utility);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--white-faint);
+  border: none;
+  background: none;
+  border-bottom: 1px solid transparent;
+  padding-bottom: 2px;
+  transition: color 0.3s var(--ease-soft), border-color 0.3s var(--ease-soft);
+}
+.lock-gate__desktop-btn:hover,
+.lock-gate__desktop-btn:focus-visible {
+  color: var(--gold);
+  border-color: var(--gold-line);
+}
+.lock-gate__desktop-btn.is-active {
+  color: var(--gold-bright);
+}
+
 /* ----------------------------------------------------------------
    5. INTRO / GATE
    ---------------------------------------------------------------- */
@@ -1211,12 +1233,12 @@ html { scrollbar-width: thin; scrollbar-color: var(--gold-dim) var(--black-void)
 .videos__header { text-align: center; margin-bottom: clamp(2.5rem, 8vh, 4rem); }
 
 .videos__grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 2rem;
+  display: flex;
+  justify-content: center;
 }
-@media (min-width: 800px) {
-  .videos__grid { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+.videos__grid .video-card {
+  width: 100%;
+  max-width: 720px;
 }
 
 .video-card {
