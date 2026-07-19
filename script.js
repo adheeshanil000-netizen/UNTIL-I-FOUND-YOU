@@ -22,6 +22,34 @@
   }
 
   /* ------------------------------------------------------------
+     DESKTOP VIEW TOGGLE
+     Websites can't flip a browser's native "Desktop Site" setting —
+     that's a browser-level control no page is allowed to touch.
+     This instead forces THIS PAGE to render at a fixed, wide
+     viewport, which triggers the same desktop CSS breakpoints —
+     visually the same result as "Desktop Site" for this site.
+     ------------------------------------------------------------ */
+  (function initDesktopViewToggle() {
+    const btn = $('#desktop-view-btn');
+    const viewportMeta = document.querySelector('meta[name="viewport"]');
+    if (!btn || !viewportMeta) return;
+
+    let isDesktopForced = false;
+    const mobileContent = viewportMeta.getAttribute('content');
+    const desktopContent = 'width=1280';
+
+    btn.addEventListener('click', () => {
+      isDesktopForced = !isDesktopForced;
+      viewportMeta.setAttribute('content', isDesktopForced ? desktopContent : mobileContent);
+      btn.classList.toggle('is-active', isDesktopForced);
+      btn.textContent = isDesktopForced
+        ? '📱 Switch back to mobile view'
+        : '🖥️ Prefer the desktop view? Tap here';
+    });
+  })();
+
+
+  /* ------------------------------------------------------------
      LOCK GATE — unlock with the date, then reveal the intro
      ------------------------------------------------------------ */
   const lockGate = $('#lock-gate');
