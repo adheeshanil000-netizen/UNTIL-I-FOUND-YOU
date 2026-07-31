@@ -137,6 +137,19 @@
   let musicUnlocked = false;
   let musicManuallyMuted = false;
 
+  // Keep the toggle's icon accurate no matter what caused play/pause —
+  // autoplay success, the fallback button, manual toggle, or video ducking.
+  if (bgMusic) {
+    bgMusic.addEventListener('play', () => {
+      soundToggle.classList.remove('is-muted');
+      soundToggle.setAttribute('aria-pressed', 'true');
+    });
+    bgMusic.addEventListener('pause', () => {
+      soundToggle.classList.add('is-muted');
+      soundToggle.setAttribute('aria-pressed', 'false');
+    });
+  }
+
   function fadeAudio(audio, targetVolume, duration = 1400) {
     return new Promise((resolve) => {
       const startVolume = audio.volume;
@@ -181,6 +194,7 @@
     mainExperience.setAttribute('aria-hidden', 'false');
     mainExperience.classList.add('is-active');
     soundToggle.classList.remove('is-hidden');
+    soundToggle.classList.toggle('is-muted', bgMusic.paused);
 
     initSplitText();
     initScrollReveals();
@@ -706,6 +720,38 @@
     });
 
     updateUI(parseFloat(slider.value));
+  })();
+
+  /* ------------------------------------------------------------
+     BALLOON REVEAL — tap a balloon to pop it and reveal its message
+     ------------------------------------------------------------ */
+  (function initBalloonPop() {
+    const balloons = $$('.balloon');
+    if (!balloons.length) return;
+
+    const burstEmoji = ['❤️', '✨', '💛'];
+
+    function spawnBurst(balloon) {
+      for (let i = 0; i < 5; i++) {
+        const particle = document.createElement('span');
+        particle.className = 'balloon-burst';
+        particle.textContent = burstEmoji[i % burstEmoji.length];
+        const angle = (i / 5) * Math.PI * 2;
+        particle.style.setProperty('--bx', `${Math.cos(angle) * 46}px`);
+        particle.style.setProperty('--by', `${Math.sin(angle) * 46 - 20}px`);
+        particle.style.animationDelay = `${i * 0.04}s`;
+        balloon.appendChild(particle);
+        setTimeout(() => particle.remove(), 1000);
+      }
+    }
+
+    balloons.forEach((balloon) => {
+      balloon.addEventListener('click', () => {
+        if (balloon.classList.contains('is-popped')) return;
+        balloon.classList.add('is-popped');
+        spawnBurst(balloon);
+      }, { once: true });
+    });
   })();
 
   /* ------------------------------------------------------------
