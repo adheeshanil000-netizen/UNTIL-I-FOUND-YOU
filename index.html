@@ -80,8 +80,9 @@
   <source src="assets/music/until-i-found-you.mp3" type="audio/mpeg">
 </audio>
 
-<!-- Floating sound toggle, appears after intro -->
-<button id="sound-toggle" class="sound-toggle is-hidden" aria-label="Toggle background music" aria-pressed="true">
+<!-- Floating sound toggle, appears after intro — doubles as a manual Play/Pause -->
+<button id="sound-toggle" class="sound-toggle is-hidden" aria-label="Play or pause background music" aria-pressed="true">
+  <span class="sound-toggle__play-icon" aria-hidden="true">▶</span>
   <span class="sound-toggle__bars" aria-hidden="true">
     <i></i><i></i><i></i><i></i>
   </span>
@@ -422,7 +423,7 @@
         >
           <source src="assets/videos/memory-01.mp4" type="video/mp4">
         </video>
-        <p class="video-card__caption">Replace with a caption for this video</p>
+        <p class="video-card__caption">Feeling my world.</p>
       </div>
     </div>
   </section>
@@ -507,9 +508,48 @@
 
     <div class="ending__content">
       <p class="ending__line" data-line>Happy Birthday</p>
-      <p class="ending__line ending__line--script" data-line>My World.</p>
-      <p class="ending__line ending__line--script" data-line>My Safe Place.</p>
-      <p class="ending__line ending__line--script" data-line>My Annnaaammoo.</p>
+
+      <div class="balloon-scene" data-line>
+        <p class="balloon-scene__hint">tap a balloon</p>
+        <div class="balloon-row">
+          <button class="balloon balloon--1" type="button" aria-label="Tap to pop the balloon and reveal a message">
+            <span class="balloon__visual" aria-hidden="true">
+              <svg viewBox="0 0 60 76" class="balloon__svg">
+                <ellipse cx="30" cy="30" rx="27" ry="30" class="balloon__shape"/>
+                <ellipse cx="19" cy="17" rx="6" ry="9" class="balloon__shine"/>
+                <path d="M30 60 L26 68 L34 68 Z" class="balloon__knot"/>
+              </svg>
+              <span class="balloon__string"></span>
+            </span>
+            <span class="balloon__text">My World.</span>
+          </button>
+
+          <button class="balloon balloon--2" type="button" aria-label="Tap to pop the balloon and reveal a message">
+            <span class="balloon__visual" aria-hidden="true">
+              <svg viewBox="0 0 60 76" class="balloon__svg">
+                <ellipse cx="30" cy="30" rx="27" ry="30" class="balloon__shape"/>
+                <ellipse cx="19" cy="17" rx="6" ry="9" class="balloon__shine"/>
+                <path d="M30 60 L26 68 L34 68 Z" class="balloon__knot"/>
+              </svg>
+              <span class="balloon__string"></span>
+            </span>
+            <span class="balloon__text">My Safe Place.</span>
+          </button>
+
+          <button class="balloon balloon--3" type="button" aria-label="Tap to pop the balloon and reveal a message">
+            <span class="balloon__visual" aria-hidden="true">
+              <svg viewBox="0 0 60 76" class="balloon__svg">
+                <ellipse cx="30" cy="30" rx="27" ry="30" class="balloon__shape"/>
+                <ellipse cx="19" cy="17" rx="6" ry="9" class="balloon__shine"/>
+                <path d="M30 60 L26 68 L34 68 Z" class="balloon__knot"/>
+              </svg>
+              <span class="balloon__string"></span>
+            </span>
+            <span class="balloon__text">My Annnaaammoo.</span>
+          </button>
+        </div>
+      </div>
+
       <p class="ending__heart" data-line>❤️</p>
 
       <div class="ending__divider" aria-hidden="true"></div>
