@@ -280,6 +280,23 @@ html { scrollbar-width: thin; scrollbar-color: var(--gold-dim) var(--black-void)
 .sound-toggle:not(.is-hidden) { opacity: 1; transform: translateY(0); }
 .sound-toggle:hover { border-color: var(--gold); }
 
+.sound-toggle__play-icon {
+  display: none;
+  font-size: 0.8rem;
+  color: var(--gold);
+  transform: translateX(1px);
+}
+.sound-toggle.is-muted .sound-toggle__play-icon { display: block; }
+.sound-toggle.is-muted .sound-toggle__bars { display: none; }
+
+.sound-toggle.is-muted {
+  animation: soundTogglePulse 2s ease-in-out infinite;
+}
+@keyframes soundTogglePulse {
+  0%, 100% { box-shadow: 0 0 0 rgba(201,169,97,0); }
+  50% { box-shadow: 0 0 18px rgba(201,169,97,0.45); }
+}
+
 .sound-toggle__bars {
   display: flex;
   align-items: flex-end;
@@ -1238,7 +1255,7 @@ html { scrollbar-width: thin; scrollbar-color: var(--gold-dim) var(--black-void)
 }
 .videos__grid .video-card {
   width: 100%;
-  max-width: 720px;
+  max-width: 380px;
 }
 
 .video-card {
@@ -1247,9 +1264,10 @@ html { scrollbar-width: thin; scrollbar-color: var(--gold-dim) var(--black-void)
 }
 .video-card__player {
   width: 100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 9 / 16;
   display: block;
   background: #000;
+  object-fit: cover;
 }
 .video-card__caption {
   padding: 1.1rem 1.3rem;
@@ -1589,6 +1607,123 @@ html { scrollbar-width: thin; scrollbar-color: var(--gold-dim) var(--black-void)
   transition: opacity 1s var(--ease-luxury), transform 1s var(--ease-luxury);
 }
 .ending__heart.is-visible { opacity: 1; transform: scale(1); }
+
+/* Balloon reveal scene */
+.balloon-scene {
+  margin: 1.2rem 0 1.6rem;
+  opacity: 0;
+  transform: translateY(20px);
+  filter: blur(4px);
+  transition: opacity 1.1s var(--ease-luxury), transform 1.1s var(--ease-luxury), filter 1.1s var(--ease-luxury);
+}
+.balloon-scene.is-visible { opacity: 1; transform: translateY(0); filter: blur(0); }
+
+.balloon-scene__hint {
+  font-family: var(--font-utility);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--white-faint);
+  margin-bottom: 1.2rem;
+  animation: hintFade 2.4s ease-in-out infinite;
+}
+@keyframes hintFade {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.balloon-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: clamp(1.2rem, 5vw, 2.2rem);
+  flex-wrap: wrap;
+}
+
+.balloon {
+  position: relative;
+  width: 84px;
+  height: 108px;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+}
+.balloon--1 { --balloon-color: #e8c874; --balloon-color-dark: #8a6f3f; animation: balloonFloat 3.4s ease-in-out infinite; }
+.balloon--2 { --balloon-color: #f2ede0; --balloon-color-dark: #c3b691; animation: balloonFloat 3.8s ease-in-out infinite -1.1s; }
+.balloon--3 { --balloon-color: #c96b73; --balloon-color-dark: #6e2530; animation: balloonFloat 3.1s ease-in-out infinite -2.2s; }
+
+@keyframes balloonFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.balloon__visual {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.5s var(--ease-luxury), opacity 0.5s var(--ease-luxury);
+}
+.balloon__svg {
+  width: 58px;
+  height: 74px;
+  filter: drop-shadow(0 8px 18px rgba(0,0,0,0.45));
+}
+.balloon__shape { fill: var(--balloon-color); }
+.balloon__shine { fill: rgba(255,255,255,0.55); }
+.balloon__knot { fill: var(--balloon-color-dark); }
+.balloon__string {
+  width: 1px;
+  flex: 1;
+  min-height: 22px;
+  background: linear-gradient(180deg, var(--balloon-color-dark), transparent);
+  margin-top: 2px;
+}
+
+.balloon__text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 2px;
+  font-family: var(--font-script);
+  font-weight: 600;
+  font-size: clamp(1rem, 3.6vw, 1.2rem);
+  color: var(--gold-bright);
+  text-shadow: 0 0 20px rgba(201,169,97,0.4);
+  opacity: 0;
+  transform: scale(0.55);
+  transition: opacity 0.5s var(--ease-luxury) 0.12s, transform 0.5s var(--ease-luxury) 0.12s;
+}
+
+.balloon.is-popped { animation: none; cursor: default; }
+.balloon.is-popped .balloon__visual {
+  transform: scale(1.6);
+  opacity: 0;
+}
+.balloon.is-popped .balloon__text {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.balloon-burst {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  font-size: 1rem;
+  pointer-events: none;
+  opacity: 0;
+  animation: balloonBurstParticle 0.9s ease-out forwards;
+}
+@keyframes balloonBurstParticle {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.4); }
+  20% { opacity: 1; }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--bx, 0px)), calc(-50% + var(--by, -40px))) scale(1); }
+}
 
 .ending__divider {
   width: 1px;
