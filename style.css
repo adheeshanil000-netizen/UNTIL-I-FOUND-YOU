@@ -216,6 +216,15 @@ html { scrollbar-width: thin; scrollbar-color: var(--gold-dim) var(--black-void)
   opacity: 0.55;
 }
 
+#firefly-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.85;
+  z-index: 2;
+}
+
 .light-ray {
   position: absolute;
   width: 60vw;
@@ -924,6 +933,66 @@ html { scrollbar-width: thin; scrollbar-color: var(--gold-dim) var(--black-void)
 }
 @keyframes charReveal {
   to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
+/* ----------------------------------------------------------------
+   6.5 TIME TOGETHER (running counter)
+   ---------------------------------------------------------------- */
+.time-together {
+  position: relative;
+  padding: clamp(4.5rem, 12vh, 7rem) var(--gutter);
+  max-width: var(--container-max);
+  margin: 0 auto;
+  text-align: center;
+  overflow: hidden;
+}
+.time-together__glow {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  width: 60vw;
+  height: 60vw;
+  max-width: 620px;
+  max-height: 620px;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, rgba(201,169,97,0.10), transparent 70%);
+  filter: blur(30px);
+  pointer-events: none;
+}
+.time-together .section-lede { margin: 0.8em auto 0; }
+
+.time-together__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.4rem 0.6rem;
+  max-width: 620px;
+  margin: clamp(2.2rem, 7vh, 3.2rem) auto 0;
+}
+@media (min-width: 640px) {
+  .time-together__grid { grid-template-columns: repeat(6, 1fr); gap: 1rem 0.5rem; }
+}
+
+.time-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+.time-unit__value {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.7rem, 6vw, 2.4rem);
+  color: var(--gold-bright);
+  text-shadow: 0 0 26px rgba(201,169,97,0.35);
+  font-variant-numeric: tabular-nums;
+  min-width: 2ch;
+}
+.time-unit__label {
+  font-family: var(--font-utility);
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--white-faint);
 }
 
 /* ----------------------------------------------------------------
@@ -1767,6 +1836,24 @@ html { scrollbar-width: thin; scrollbar-color: var(--gold-dim) var(--black-void)
   font-size: clamp(1.8rem, 5vw, 2.6rem);
   color: var(--gold-bright);
 }
+
+.ending__replay {
+  margin-top: 3rem;
+  padding: 0.7em 1.6em;
+  border-radius: 999px;
+  border: 1px solid var(--gold-line);
+  background: none;
+  color: var(--white-faint);
+  font-family: var(--font-utility);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 1s var(--ease-luxury), transform 1s var(--ease-luxury), border-color 0.3s, color 0.3s;
+}
+.ending__replay.is-visible { opacity: 0.8; transform: translateY(0); }
+.ending__replay:hover { border-color: var(--gold); color: var(--gold-bright); opacity: 1; }
 
 /* ----------------------------------------------------------------
    13. RESPONSIVE REFINEMENTS
