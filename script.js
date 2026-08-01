@@ -449,6 +449,75 @@
   initParticles();
 
   /* ------------------------------------------------------------
+     FIREFLIES — small glowing lights that wander the whole site
+     ------------------------------------------------------------ */
+  function initFireflies() {
+    const canvas = $('#firefly-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let flies = [];
+    let w, h, dpr;
+
+    function resize() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = canvas.width = window.innerWidth * dpr;
+      h = canvas.height = window.innerHeight * dpr;
+      canvas.style.width = window.innerWidth + 'px';
+      canvas.style.height = window.innerHeight + 'px';
+    }
+
+    function makeFlies() {
+      const count = Math.round((window.innerWidth * window.innerHeight) / 60000);
+      flies = Array.from({ length: Math.min(Math.max(count, 8), 18) }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        angle: Math.random() * Math.PI * 2,
+        speed: (Math.random() * 0.35 + 0.15) * dpr,
+        turnSpeed: (Math.random() - 0.5) * 0.05,
+        r: (Math.random() * 1.4 + 1.2) * dpr,
+        blinkSpeed: Math.random() * 0.02 + 0.008,
+        blinkPhase: Math.random() * Math.PI * 2,
+      }));
+    }
+
+    let frame = 0;
+    function draw() {
+      ctx.clearRect(0, 0, w, h);
+      frame++;
+      flies.forEach((f) => {
+        // gentle wandering: slowly drift the heading, with a touch of randomness
+        f.angle += f.turnSpeed + (Math.random() - 0.5) * 0.04;
+        f.x += Math.cos(f.angle) * f.speed;
+        f.y += Math.sin(f.angle) * f.speed;
+
+        // wrap around edges so they roam the whole page continuously
+        if (f.x < -20) f.x = w + 20;
+        if (f.x > w + 20) f.x = -20;
+        if (f.y < -20) f.y = h + 20;
+        if (f.y > h + 20) f.y = -20;
+
+        const blink = (Math.sin(frame * f.blinkSpeed + f.blinkPhase) + 1) / 2;
+        const alpha = 0.15 + blink * 0.75;
+
+        ctx.beginPath();
+        ctx.arc(f.x, f.y, f.r * (0.7 + blink * 0.5), 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(238, 214, 148, ${alpha})`;
+        ctx.shadowBlur = 10 * dpr;
+        ctx.shadowColor = `rgba(232, 200, 116, ${alpha})`;
+        ctx.fill();
+      });
+      requestAnimationFrame(draw);
+    }
+
+    resize();
+    makeFlies();
+    if (!prefersReducedMotion) requestAnimationFrame(draw);
+    window.addEventListener('resize', throttle(() => { resize(); makeFlies(); }, 200));
+  }
+
+  initFireflies();
+
+  /* ------------------------------------------------------------
      STARFIELD FOR ENDING SECTION
      ------------------------------------------------------------ */
   function initStarfield() {
@@ -720,6 +789,68 @@
     });
 
     updateUI(parseFloat(slider.value));
+  })();
+
+  /* ------------------------------------------------------------
+     TIME TOGETHER — live running counter, never stops
+     ------------------------------------------------------------ */
+  (function initTimeTogether() {
+    const yearsEl = $('#tt-years');
+    if (!yearsEl) return;
+    const monthsEl = $('#tt-months');
+    const daysEl = $('#tt-days');
+    const hoursEl = $('#tt-hours');
+    const minutesEl = $('#tt-minutes');
+    const secondsEl = $('#tt-seconds');
+
+    // 22 April 2022, 1:00 PM — adjust here if the exact time is different
+    const START = new Date(2022, 3, 22, 13, 0, 0);
+
+    function calendarElapsed(start, now) {
+      let years = now.getFullYear() - start.getFullYear();
+      let months = now.getMonth() - start.getMonth();
+      let days = now.getDate() - start.getDate();
+      let hours = now.getHours() - start.getHours();
+      let minutes = now.getMinutes() - start.getMinutes();
+      let seconds = now.getSeconds() - start.getSeconds();
+
+      if (seconds < 0) { seconds += 60; minutes--; }
+      if (minutes < 0) { minutes += 60; hours--; }
+      if (hours < 0) { hours += 24; days--; }
+      if (days < 0) {
+        const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+        days += prevMonth.getDate();
+        months--;
+      }
+      if (months < 0) { months += 12; years--; }
+
+      return { years, months, days, hours, minutes, seconds };
+    }
+
+    function tick() {
+      const now = new Date();
+      const e = calendarElapsed(START, now);
+      yearsEl.textContent = e.years;
+      monthsEl.textContent = e.months;
+      daysEl.textContent = e.days;
+      hoursEl.textContent = String(e.hours).padStart(2, '0');
+      minutesEl.textContent = String(e.minutes).padStart(2, '0');
+      secondsEl.textContent = String(e.seconds).padStart(2, '0');
+    }
+
+    tick();
+    setInterval(tick, 1000);
+  })();
+
+  /* ------------------------------------------------------------
+     REPLAY — smooth scroll back to the hero
+     ------------------------------------------------------------ */
+  (function initReplayButton() {
+    const replayBtn = $('#replay-btn');
+    if (!replayBtn) return;
+    replayBtn.addEventListener('click', () => {
+      $('#hero').scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+    });
   })();
 
   /* ------------------------------------------------------------
