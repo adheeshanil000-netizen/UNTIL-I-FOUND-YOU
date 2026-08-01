@@ -7,6 +7,15 @@
 <title>Happy Birthday, Annnaaammoo ❤️</title>
 <meta name="description" content="A love letter to Annnaaammoo, from Aadhi.">
 
+<!-- Favicon — a small gold heart, no image file needed -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 29'%3E%3Cpath fill='%23c9a961' d='M16 28.5C16 28.5 1 19.2 1 8.9C1 3.9 5 0 9.8 0C12.9 0 15.2 1.6 16 3.9C16.8 1.6 19.1 0 22.2 0C27 0 31 3.9 31 8.9C31 19.2 16 28.5 16 28.5Z'/%3E%3C/svg%3E">
+
+<!-- Link preview (shows if this URL is ever shared/forwarded before scanning) -->
+<meta property="og:title" content="Happy Birthday, Annnaaammoo ❤️">
+<meta property="og:description" content="A story, for you.">
+<meta property="og:image" content="assets/images/hero.jpg">
+<meta property="og:type" content="website">
+
 <!-- Preload core fonts for luxury typography -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -68,6 +77,7 @@
 <!-- ============================================================ -->
 <div class="ambient-layer" aria-hidden="true">
   <canvas id="particle-canvas"></canvas>
+  <canvas id="firefly-canvas"></canvas>
   <div class="light-ray ray-1"></div>
   <div class="light-ray ray-2"></div>
   <div class="grain-overlay"></div>
@@ -167,6 +177,43 @@
     <div class="hero__scroll-cue" aria-hidden="true">
       <span class="hero__scroll-line"></span>
       <span class="hero__scroll-text">scroll</span>
+    </div>
+  </section>
+
+  <!-- ========================================================== -->
+  <!-- TIME TOGETHER — a running counter since 22 April 2022, 1pm  -->
+  <!-- ========================================================== -->
+  <section id="time-together" class="time-together" aria-label="Time Together" data-reveal>
+    <div class="time-together__glow" aria-hidden="true"></div>
+    <p class="section-eyebrow">And Counting</p>
+    <h2 class="section-title">Together Since 22 April 2022</h2>
+    <p class="section-lede">This number never stops. Neither will we.</p>
+
+    <div class="time-together__grid" id="time-together-grid">
+      <div class="time-unit">
+        <span class="time-unit__value" id="tt-years">0</span>
+        <span class="time-unit__label">Years</span>
+      </div>
+      <div class="time-unit">
+        <span class="time-unit__value" id="tt-months">0</span>
+        <span class="time-unit__label">Months</span>
+      </div>
+      <div class="time-unit">
+        <span class="time-unit__value" id="tt-days">0</span>
+        <span class="time-unit__label">Days</span>
+      </div>
+      <div class="time-unit">
+        <span class="time-unit__value" id="tt-hours">0</span>
+        <span class="time-unit__label">Hours</span>
+      </div>
+      <div class="time-unit">
+        <span class="time-unit__value" id="tt-minutes">0</span>
+        <span class="time-unit__label">Minutes</span>
+      </div>
+      <div class="time-unit">
+        <span class="time-unit__value" id="tt-seconds">0</span>
+        <span class="time-unit__label">Seconds</span>
+      </div>
     </div>
   </section>
 
@@ -508,48 +555,9 @@
 
     <div class="ending__content">
       <p class="ending__line" data-line>Happy Birthday</p>
-
-      <div class="balloon-scene" data-line>
-        <p class="balloon-scene__hint">tap a balloon</p>
-        <div class="balloon-row">
-          <button class="balloon balloon--1" type="button" aria-label="Tap to pop the balloon and reveal a message">
-            <span class="balloon__visual" aria-hidden="true">
-              <svg viewBox="0 0 60 76" class="balloon__svg">
-                <ellipse cx="30" cy="30" rx="27" ry="30" class="balloon__shape"/>
-                <ellipse cx="19" cy="17" rx="6" ry="9" class="balloon__shine"/>
-                <path d="M30 60 L26 68 L34 68 Z" class="balloon__knot"/>
-              </svg>
-              <span class="balloon__string"></span>
-            </span>
-            <span class="balloon__text">My World.</span>
-          </button>
-
-          <button class="balloon balloon--2" type="button" aria-label="Tap to pop the balloon and reveal a message">
-            <span class="balloon__visual" aria-hidden="true">
-              <svg viewBox="0 0 60 76" class="balloon__svg">
-                <ellipse cx="30" cy="30" rx="27" ry="30" class="balloon__shape"/>
-                <ellipse cx="19" cy="17" rx="6" ry="9" class="balloon__shine"/>
-                <path d="M30 60 L26 68 L34 68 Z" class="balloon__knot"/>
-              </svg>
-              <span class="balloon__string"></span>
-            </span>
-            <span class="balloon__text">My Safe Place.</span>
-          </button>
-
-          <button class="balloon balloon--3" type="button" aria-label="Tap to pop the balloon and reveal a message">
-            <span class="balloon__visual" aria-hidden="true">
-              <svg viewBox="0 0 60 76" class="balloon__svg">
-                <ellipse cx="30" cy="30" rx="27" ry="30" class="balloon__shape"/>
-                <ellipse cx="19" cy="17" rx="6" ry="9" class="balloon__shine"/>
-                <path d="M30 60 L26 68 L34 68 Z" class="balloon__knot"/>
-              </svg>
-              <span class="balloon__string"></span>
-            </span>
-            <span class="balloon__text">My Annnaaammoo.</span>
-          </button>
-        </div>
-      </div>
-
+      <p class="ending__line ending__line--script" data-line>My World.</p>
+      <p class="ending__line ending__line--script" data-line>My Safe Place.</p>
+      <p class="ending__line ending__line--script" data-line>My Annnaaammoo.</p>
       <p class="ending__heart" data-line>❤️</p>
 
       <div class="ending__divider" aria-hidden="true"></div>
@@ -564,6 +572,10 @@
         <p class="ending__signoff-label">Forever Yours,</p>
         <p class="ending__signoff-name">Aadhi ❤️</p>
       </div>
+
+      <button type="button" id="replay-btn" class="ending__replay" data-line>
+        ↻ Watch it again
+      </button>
     </div>
   </section>
 
