@@ -38,14 +38,19 @@
     const mobileContent = viewportMeta.getAttribute('content');
     const desktopContent = 'width=1280';
 
-    btn.addEventListener('click', () => {
-      isDesktopForced = !isDesktopForced;
+    function setDesktopForced(forced) {
+      isDesktopForced = forced;
       viewportMeta.setAttribute('content', isDesktopForced ? desktopContent : mobileContent);
       btn.classList.toggle('is-active', isDesktopForced);
       btn.textContent = isDesktopForced
         ? '📱 Switch back to mobile view'
         : '🖥️ Prefer the desktop view? Tap here';
-    });
+    }
+
+    btn.addEventListener('click', () => setDesktopForced(!isDesktopForced));
+
+    // Exposed so "Begin Our Story" can force desktop view automatically.
+    window.__forceDesktopView = () => setDesktopForced(true);
   })();
 
 
@@ -185,6 +190,10 @@
 
   beginBtn.addEventListener('click', async () => {
     beginBtn.disabled = true;
+
+    // Force desktop layout the moment she begins the story
+    if (window.__forceDesktopView) window.__forceDesktopView();
+
     startMusic();
 
     introSection.classList.add('is-leaving');
@@ -200,6 +209,7 @@
     initScrollReveals();
     initTimelineProgress();
     initProgressRail();
+    initLoveMarquee();
 
     // Fallback: if the browser blocked the earlier autoplay attempt,
     // surface an explicit "Play Our Song" prompt tied to its own direct tap.
@@ -363,6 +373,155 @@
     window.addEventListener('scroll', throttle(updateRail, 50), { passive: true });
     window.addEventListener('resize', throttle(updateRail, 100));
     updateRail();
+  }
+
+  /* ------------------------------------------------------------
+     LOVE MARQUEE — "I Love You" in every language
+     English + Malayalam appear roughly twice as often as any
+     other language, alternating with the rest of the sequence.
+     ------------------------------------------------------------ */
+  function initLoveMarquee() {
+    const ENGLISH = { lang: 'English', text: 'I Love You' };
+
+    // Every language here (including Malayalam) appears exactly once per
+    // loop, same as any other — nothing is specially repeated.
+    const ALL_LANGS = [
+      { lang: 'French', text: "Je t'aime" },
+      { lang: 'Spanish', text: 'Te amo' },
+      { lang: 'Hindi', text: 'मैं तुमसे प्यार करता हूँ' },
+      { lang: 'Tamil', text: 'நான் உன்னை காதலிக்கிறேன்' },
+      { lang: 'German', text: 'Ich liebe dich' },
+      { lang: 'Japanese', text: '愛してる' },
+      { lang: 'Korean', text: '사랑해' },
+      { lang: 'Chinese', text: '我爱你' },
+      { lang: 'Italian', text: 'Ti amo' },
+      { lang: 'Arabic', text: 'أحبك' },
+      { lang: 'Russian', text: 'Я тебя люблю' },
+      { lang: 'Portuguese', text: 'Eu te amo' },
+      { lang: 'Dutch', text: 'Ik hou van jou' },
+      { lang: 'Swedish', text: 'Jag älskar dig' },
+      { lang: 'Greek', text: "Σ'αγαπώ" },
+      { lang: 'Turkish', text: 'Seni seviyorum' },
+      { lang: 'Vietnamese', text: 'Anh yêu em' },
+      { lang: 'Thai', text: 'ฉันรักคุณ' },
+      { lang: 'Indonesian', text: 'Aku cinta kamu' },
+      { lang: 'Polish', text: 'Kocham Cię' },
+      { lang: 'Hebrew', text: 'אני אוהב אותך' },
+      { lang: 'Swahili', text: 'Nakupenda' },
+      { lang: 'Filipino', text: 'Mahal kita' },
+      { lang: 'Bengali', text: 'আমি তোমাকে ভালোবাসি' },
+      { lang: 'Telugu', text: 'నేను నిన్ను ప్రేమిస్తున్నాను' },
+      { lang: 'Kannada', text: 'ನಾನು ನಿನ್ನನ್ನು ಪ್ರೀತಿಸುತ್ತೇನೆ' },
+      { lang: 'Marathi', text: 'मी तुझ्यावर प्रेम करतो' },
+      { lang: 'Punjabi', text: 'ਮੈਂ ਤੈਨੂੰ ਪਿਆਰ ਕਰਦਾ ਹਾਂ' },
+      { lang: 'Urdu', text: 'میں تم سے محبت کرتا ہوں' },
+      { lang: 'Persian', text: 'دوستت دارم' },
+      { lang: 'Finnish', text: 'Minä rakastan sinua' },
+      { lang: 'Norwegian', text: 'Jeg elsker deg' },
+      { lang: 'Danish', text: 'Jeg elsker dig' },
+      { lang: 'Hungarian', text: 'Szeretlek' },
+      { lang: 'Czech', text: 'Miluji tě' },
+      { lang: 'Romanian', text: 'Te iubesc' },
+      { lang: 'Ukrainian', text: 'Я тебе кохаю' },
+      { lang: 'Zulu', text: 'Ngiyakuthanda' },
+      { lang: 'Hawaiian', text: "Aloha wau iā 'oe" },
+      { lang: 'Irish', text: 'Tá grá agam duit' },
+      { lang: 'Welsh', text: "Rwy'n dy garu di" },
+      { lang: 'Icelandic', text: 'Ég elska þig' },
+      { lang: 'Malay', text: 'Aku cintakan kamu' },
+      { lang: 'Nepali', text: 'म तिमीलाई माया गर्छु' },
+      { lang: 'Sinhala', text: 'මම ඔයාට ආදරෙයි' },
+      { lang: 'Malayalam', text: 'ഞാൻ നിന്നെ സ്നേഹിക്കുന്നു' },
+      { lang: 'Afrikaans', text: 'Ek het jou lief' },
+      { lang: 'Albanian', text: 'Të dua' },
+      { lang: 'Armenian', text: 'Ես սիրում եմ քեզ' },
+      { lang: 'Azerbaijani', text: 'Mən səni sevirəm' },
+      { lang: 'Basque', text: 'Maite zaitut' },
+      { lang: 'Belarusian', text: 'Я цябе кахаю' },
+      { lang: 'Bosnian', text: 'Volim te' },
+      { lang: 'Bulgarian', text: 'Обичам те' },
+      { lang: 'Burmese', text: 'ချစ်တယ်' },
+      { lang: 'Catalan', text: "T'estimo" },
+      { lang: 'Croatian', text: 'Volim te' },
+      { lang: 'Estonian', text: 'Ma armastan sind' },
+      { lang: 'Georgian', text: 'მე შენ მიყვარხარ' },
+      { lang: 'Gujarati', text: 'હું તને પ્રેમ કરું છું' },
+      { lang: 'Haitian Creole', text: 'Mwen renmen ou' },
+      { lang: 'Kazakh', text: 'Мен сені сүйемін' },
+      { lang: 'Khmer', text: 'ខ្ញុំស្រលាញ់អ្នក' },
+      { lang: 'Kurdish', text: 'Ez te hez dikim' },
+      { lang: 'Kyrgyz', text: 'Мен сени сүйөм' },
+      { lang: 'Lao', text: 'ຂ້ອຍຮັກເຈົ້າ' },
+      { lang: 'Latvian', text: 'Es tevi mīlu' },
+      { lang: 'Lithuanian', text: 'Aš tave myliu' },
+      { lang: 'Luxembourgish', text: 'Ech hunn dech gär' },
+      { lang: 'Macedonian', text: 'Те сакам' },
+      { lang: 'Maltese', text: 'Inħobbok' },
+      { lang: 'Maori', text: 'Kei te aroha ahau ki a koe' },
+      { lang: 'Mongolian', text: 'Би чамд хайртай' },
+      { lang: 'Odia', text: 'ମୁଁ ତୁମକୁ ଭଲ ପାଏ' },
+      { lang: 'Pashto', text: 'زه تا سره مینه لرم' },
+      { lang: 'Samoan', text: "Ou te alofa iā te oe" },
+      { lang: 'Serbian', text: 'Волим те' },
+      { lang: 'Slovak', text: 'Ľúbim ťa' },
+      { lang: 'Slovenian', text: 'Ljubim te' },
+      { lang: 'Somali', text: 'Waan ku jeclahay' },
+      { lang: 'Tajik', text: 'Ман туро дӯст медорам' },
+      { lang: 'Tatar', text: 'Мин сине яратам' },
+      { lang: 'Tibetan', text: 'ང་ཁྱེད་ལ་དགའ།' },
+      { lang: 'Tongan', text: "'Oku ou 'ofa atu" },
+      { lang: 'Turkmen', text: 'Men seni söýýärin' },
+      { lang: 'Uyghur', text: 'مەن سېنى ياخشى كۆرىمەن' },
+      { lang: 'Uzbek', text: 'Men seni sevaman' },
+      { lang: 'Xhosa', text: 'Ndiyakuthanda' },
+      { lang: 'Yiddish', text: 'איך ליב דיך' },
+      { lang: 'Yoruba', text: 'Mo nifẹ rẹ' },
+      { lang: 'Cebuano', text: 'Gihigugma ko ikaw' },
+      { lang: 'Corsican', text: 'Ti tengu caru' },
+      { lang: 'Esperanto', text: 'Mi amas vin' },
+      { lang: 'Frisian', text: 'Ik hâld fan dy' },
+      { lang: 'Galician', text: 'Quérote' },
+      { lang: 'Hausa', text: 'Ina son ki' },
+      { lang: 'Igbo', text: "A hụrụ m gị n'anya" },
+      { lang: 'Javanese', text: 'Aku tresno kowe' },
+      { lang: 'Latin', text: 'Te amo' },
+      { lang: 'Malagasy', text: 'Tiako ianao' },
+      { lang: 'Sesotho', text: 'Kea u rata' },
+      { lang: 'Shona', text: 'Ndinokuda' },
+      { lang: 'Sundanese', text: 'Abdi bogoh ka anjeun' },
+      { lang: 'Assamese', text: 'মই তোমাক ভাল পাওঁ' },
+      { lang: 'Sindhi', text: 'مان توسان پيار ٿو ڪريان' },
+    ];
+
+    // English gets a light, occasional boost — inserted every 6th item,
+    // not alternated in like before. Every other language, including
+    // Malayalam, appears exactly once per full loop.
+    function buildSequence(offset) {
+      const rotated = ALL_LANGS.slice(offset).concat(ALL_LANGS.slice(0, offset));
+      const seq = [];
+      rotated.forEach((item, i) => {
+        seq.push(item);
+        if ((i + 1) % 6 === 0) seq.push(ENGLISH);
+      });
+      return seq;
+    }
+
+    function renderRow(trackId, sequence) {
+      const track = document.getElementById(trackId);
+      if (!track) return;
+      const html = sequence
+        .map(
+          (item) =>
+            `<span class="love-marquee__item"><span class="love-marquee__text">${item.text}</span><span class="love-marquee__lang">${item.lang}</span></span><span class="love-marquee__sep" aria-hidden="true">✦</span>`
+        )
+        .join('');
+      // Duplicate the sequence so the loop is seamless (translateX -50% <-> 0%).
+      track.innerHTML = html + html;
+    }
+
+    renderRow('marquee-track-1', buildSequence(0));
+    renderRow('marquee-track-2', buildSequence(15));
+    renderRow('marquee-track-3', buildSequence(30));
   }
 
   function throttle(fn, wait) {
