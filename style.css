@@ -331,6 +331,57 @@ html { scrollbar-width: thin; scrollbar-color: var(--gold-dim) var(--black-void)
   50% { height: 100%; }
 }
 
+/* Romantic arrow hint pointing at the sound toggle */
+.sound-hint {
+  position: fixed;
+  top: max(64px, calc(env(safe-area-inset-top) + 64px));
+  right: 58px;
+  z-index: 59;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.3rem;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 0.9s var(--ease-luxury), transform 0.9s var(--ease-luxury), visibility 0.9s;
+}
+.sound-hint:not(.is-hidden) {
+  opacity: 1;
+  transform: translateY(0);
+  animation: soundHintFloat 2.6s ease-in-out infinite;
+}
+.sound-hint.is-hidden { visibility: hidden; }
+
+@keyframes soundHintFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(4px); }
+}
+
+.sound-hint__arrow {
+  width: 58px;
+  height: 58px;
+  color: var(--gold-bright);
+  filter: drop-shadow(0 0 8px rgba(201,169,97,0.55));
+  transform: scaleX(-1);
+}
+
+.sound-hint__text {
+  font-family: var(--font-script);
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--gold-bright);
+  text-shadow: 0 0 16px rgba(201,169,97,0.5);
+  white-space: nowrap;
+  margin-right: 0.3rem;
+}
+
+@media (max-width: 380px) {
+  .sound-hint__arrow { width: 46px; height: 46px; }
+  .sound-hint__text { font-size: 0.92rem; }
+  .sound-hint { right: 50px; }
+}
+
 /* Play Our Song — sits inline in the hero, between the name and subtitle */
 .play-song-prompt {
   display: flex;
@@ -1259,13 +1310,13 @@ html { scrollbar-width: thin; scrollbar-color: var(--gold-dim) var(--black-void)
 }
 
 .love-marquee__row--1 .love-marquee__track {
-  animation: marqueeLTR 190s linear infinite;
+  animation: marqueeLTR 480s linear infinite;
 }
 .love-marquee__row--2 .love-marquee__track {
-  animation: marqueeRTL 150s linear infinite;
+  animation: marqueeRTL 400s linear infinite;
 }
 .love-marquee__row--3 .love-marquee__track {
-  animation: marqueeLTR 210s linear infinite;
+  animation: marqueeLTR 520s linear infinite;
 }
 
 @keyframes marqueeLTR {
