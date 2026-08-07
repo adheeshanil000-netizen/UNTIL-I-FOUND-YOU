@@ -110,6 +110,7 @@
   const introHint = $('.intro__hint');
   const mainExperience = $('#main-experience');
   const soundToggle = $('#sound-toggle');
+  const soundHint = $('#sound-hint');
 
   async function runIntroSequence() {
     if (prefersReducedMotion) {
@@ -204,6 +205,7 @@
     mainExperience.classList.add('is-active');
     soundToggle.classList.remove('is-hidden');
     soundToggle.classList.toggle('is-muted', bgMusic.paused);
+    if (soundHint) soundHint.classList.remove('is-hidden');
 
     initSplitText();
     initScrollReveals();
@@ -224,6 +226,7 @@
 
   if (playSongBtn) {
     playSongBtn.addEventListener('click', () => {
+      if (soundHint) soundHint.classList.add('is-hidden');
       // Call play() synchronously, directly inside this tap handler —
       // this is what makes it reliable on iOS/Safari even when an
       // earlier async-chained play() attempt was silently blocked.
@@ -241,6 +244,7 @@
      SOUND TOGGLE
      ------------------------------------------------------------ */
   soundToggle.addEventListener('click', () => {
+    if (soundHint) soundHint.classList.add('is-hidden');
     if (!bgMusic) return;
     if (bgMusic.paused || musicManuallyMuted) {
       musicManuallyMuted = false;
@@ -1218,7 +1222,7 @@
       clampOrigin();
       applyTransform();
     });
-  })(); 
+  })();
 
   /* ------------------------------------------------------------
      VIDEO ↔ MUSIC DUCKING
