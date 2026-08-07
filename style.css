@@ -1259,13 +1259,13 @@ html { scrollbar-width: thin; scrollbar-color: var(--gold-dim) var(--black-void)
 }
 
 .love-marquee__row--1 .love-marquee__track {
-  animation: marqueeLTR 62s linear infinite;
+  animation: marqueeLTR 190s linear infinite;
 }
 .love-marquee__row--2 .love-marquee__track {
-  animation: marqueeRTL 50s linear infinite;
+  animation: marqueeRTL 150s linear infinite;
 }
 .love-marquee__row--3 .love-marquee__track {
-  animation: marqueeLTR 70s linear infinite;
+  animation: marqueeLTR 210s linear infinite;
 }
 
 @keyframes marqueeLTR {
@@ -1969,7 +1969,7 @@ html { scrollbar-width: thin; scrollbar-color: var(--gold-dim) var(--black-void)
   font-family: var(--font-script);
   font-size: clamp(1.8rem, 5vw, 2.6rem);
   color: var(--gold-bright);
-} 
+}
 
 .ending__replay {
   margin-top: 3rem;
